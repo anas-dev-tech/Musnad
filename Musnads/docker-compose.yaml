@@ -1,0 +1,26 @@
+services:
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
+  postgres:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: 'Musnad'
+      POSTGRES_USER: 'django'
+      POSTGRES_PASSWORD: '1234'
+
+  django:
+    build: .
+    volumes:
+      - ./myproject:/code
+    environment:
+      DJANGO_SETTINGS_MODULE: myproject.settings
+    depends_on:
+      - redis
+      - postgres
+    ports:
+      - "8000:8000"
